@@ -2,7 +2,7 @@ import os
 import json
 import requests
 import urllib3
-from githubapi4research import GithubAPI4Research
+from githubapi4research.githubapi4research import GithubAPI4Research
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
@@ -15,12 +15,20 @@ class IssueAPI4Research(GithubAPI4Research):
             if os.path.exists(f"{self.to_dir}/{self.repo_name}IssueIndexTmp.log"):
                 with open(f"{self.to_dir}/{self.repo_name}IssueIndexTmp.log") as fp:
                     index = int(fp.readline())
+            
+            with open(f"{self.to_dir}/{self.to_file}", "r", encoding='utf-8') as fp:
+                json_list = json.load(fp=fp)
 
             while True:
                 if author == None:
-                    response = requests.get(url="https://api.github.com/repos/{}/{}/issues?state=all&per_page=100&page={}".format(self.repo_owner, self.repo_name, index), headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
+                    url = "https://api.github.com/repos/{}/{}/issues?state=all&per_page=100&page={}".format(self.repo_owner, self.repo_name, index)
+                    print(url)
+                    response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
                 else:
-                    response = requests.get(url="https://api.github.com/repos/{}/{}/issues?state=all&per_page=100&page={}&author={}".format(self.repo_owner, self.repo_name, index, author), headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
+                    url = "https://api.github.com/repos/{}/{}/issues?state=all&per_page=100&page={}&author={}".format(self.repo_owner, self.repo_name, index, author)
+                    print(f'url : {url}')
+                    response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
+
                 response.raise_for_status()
                 if response.status_code == requests.codes.ok:
                     response_json_list = response.json()
@@ -38,15 +46,14 @@ class IssueAPI4Research(GithubAPI4Research):
                     with open(f"{self.to_dir}/{self.repo_name}IssueIndexTmp.log", "w", encoding='utf-8') as fp:
                         fp.write(str(index))
 
-                    with open(f"{self.to_dir}/{self.repo_name}IssueTmp.json", "a", encoding='utf-8') as fp:
+                    with open(f"{self.to_dir}/{self.to_file}", "w", encoding='utf-8') as fp:
                         json.dump(json_list, fp=fp, indent=4)
-                        json_list = []
             
             if os.path.exists(f"{self.to_dir}/{self.repo_name}IssueIndexTmp.log"):
                 os.remove(f"{self.to_dir}/{self.repo_name}IssueIndexTmp.log")
-            
-            if os.path.exists(f"{self.to_dir}/{self.repo_name}IssueTmp.json"):
-                os.remove(f"{self.to_dir}/{self.repo_name}IssueTmp.json")
+
+            with open(f"{self.to_dir}/{self.to_file}", "w", encoding='utf-8') as fp:
+                json.dump(json_list, fp=fp, indent=4)
         
         except requests.exceptions.RequestException as e:
             raise SystemExit(e)

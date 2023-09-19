@@ -9,6 +9,8 @@ class GithubAPI4Research(ABC):
         self.to_dir = to_dir
         self.to_file = to_file
 
+        print(f"repo owner : {repo_owner}, repo_name : {repo_name}")
+
         if not os.path.exists(to_dir):
             os.mkdir(to_dir)
     
