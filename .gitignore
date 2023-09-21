@@ -1,3 +1,6 @@
 githubapi4research/__pycache__/
 main.py
 LTCs/
+build/
+dist/
+githubapi4research.egg-info/
