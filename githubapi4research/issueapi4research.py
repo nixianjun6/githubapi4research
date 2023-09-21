@@ -26,7 +26,7 @@ class IssueAPI4Research(GithubAPI4Research):
                     print(url)
                     response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
                 else:
-                    url = "https://api.github.com/repos/{}/{}/issues?state=all&per_page=100&page={}&author={}".format(self.repo_owner, self.repo_name, index, author)
+                    url = "https://api.github.com/repos/{}/{}/issues?state=all&per_page=100&page={}&creator={}".format(self.repo_owner, self.repo_name, index, author)
                     print(f'url : {url}')
                     response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
 

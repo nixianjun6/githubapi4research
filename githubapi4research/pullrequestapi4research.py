@@ -7,7 +7,7 @@ from githubapi4research.githubapi4research import GithubAPI4Research
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 class PullRequestAPI4Research(GithubAPI4Research):
-    def get(self, start_time=None, end_time=None, checkpoint=200, author=None):
+    def get(self, start_time=None, end_time=None, checkpoint=200):
         json_list = []
         index = 0
 
@@ -21,14 +21,9 @@ class PullRequestAPI4Research(GithubAPI4Research):
 
         while True:
             try:
-                if author == None:
-                    url = "https://api.github.com/repos/{}/{}/pulls?state=all&per_page=100&page={}".format(self.repo_owner, self.repo_name, index)
-                    print(url)
-                    response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
-                else:
-                    url = "https://api.github.com/repos/{}/{}/pulls?state=all&per_page=100&page={}&author={}".format(self.repo_owner, self.repo_name, index, author)
-                    print(url)
-                    response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
+                url = "https://api.github.com/repos/{}/{}/pulls?state=all&per_page=100&page={}".format(self.repo_owner, self.repo_name, index)
+                print(url)
+                response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
 
                 response.raise_for_status()
                 if response.status_code == requests.codes.ok:
