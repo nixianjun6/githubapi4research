@@ -62,15 +62,15 @@ class PullRequestCommentsAPI4Research(GithubAPI4Research):
             if index != 0 and index % checkpoint == 0:
                 index = 0
                 sinceTime = json_list[-1]['created_at']
-                with open(f"{self.to_dir}/{self.repo_name}PullRequestIndexTmp.log", "w", encoding='utf-8') as fp:
+                with open(f"{self.to_dir}/{self.repo_name}PullRequestCommentsIndexTmp.log", "w", encoding='utf-8') as fp:
                     fp.write(str(index) + '#' + sinceTime)
                     print(index, sinceTime+"Save  successfully")
 
                 with open(f"{self.to_dir}/{self.to_file}", "w", encoding='utf-8') as fp:
                     json.dump(json_list, fp=fp, indent=4)
         
-        if os.path.exists(f"{self.to_dir}/{self.repo_name}PullRequestIndexTmp.log"):
-            os.remove(f"{self.to_dir}/{self.repo_name}PullRequestIndexTmp.log")
+        if os.path.exists(f"{self.to_dir}/{self.repo_name}PullRequestCommentsIndexTmp.log"):
+            os.remove(f"{self.to_dir}/{self.repo_name}PullRequestCommentsIndexTmp.log")
         
         with open(f"{self.to_dir}/{self.to_file}", "w", encoding='utf-8') as fp:
             json.dump(json_list, fp=fp, indent=4)
