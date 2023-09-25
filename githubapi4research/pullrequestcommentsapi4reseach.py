@@ -26,7 +26,7 @@ class PullRequestCommentsAPI4Research(GithubAPI4Research):
         sinceTime = start_time
 
         if os.path.exists(f"{self.to_dir}/{self.repo_name}PullRequestCommentsIndexTmp.log"):
-            with open(f"{self.to_dir}/{self.repo_name}PullRequestCommentIndexTmp.log") as fp:
+            with open(f"{self.to_dir}/{self.repo_name}PullRequestCommentsIndexTmp.log") as fp:
                 line = fp.readline()
                 index = int(line.split('#')[0])
                 sinceTime = line.split('#')[1]
