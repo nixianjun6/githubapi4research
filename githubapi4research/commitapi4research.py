@@ -10,6 +10,21 @@ class CommitAPI4Research(GithubAPI4Research):
     def get(self, start_time=None, end_time=None, checkpoint=200, author=None):
         json_list = []
         index = 0
+        
+        if start_time is None:
+            url = "https://api.github.com/repos/{}/{}".format(self.repo_owner, self.repo_name)
+            print("get " + url + " start_time")
+            response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
+
+            response.raise_for_status()
+            if response.status_code == requests.codes.ok:
+                start_time = response.json()['created_at']
+                print("get " + url + " start_time successfully")
+            else:
+                print("get " + url + " start_time failed")
+                return
+
+        sinceTime = start_time
 
         if os.path.exists(f"{self.to_dir}/{self.repo_name}CommitIndexTmp.log"):
             with open(f"{self.to_dir}/{self.repo_name}CommitIndexTmp.log") as fp:
@@ -22,11 +37,11 @@ class CommitAPI4Research(GithubAPI4Research):
         while True:
             try:
                 if author == None:
-                    url = "https://api.github.com/repos/{}/{}/commits?state=all&per_page=100&page={}".format(self.repo_owner, self.repo_name, index)
+                    url = "https://api.github.com/repos/{}/{}/commits?state=all&per_page=100&page={}&since={}".format(self.repo_owner, self.repo_name, index, sinceTime)
                     print(f'url : {url}')
                     response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False, timeout=10)
                 else:
-                    url = "https://api.github.com/repos/{}/{}/commits?state=all&per_page=100&page={}&author={}".format(self.repo_owner, self.repo_name, index, author)
+                    url = "https://api.github.com/repos/{}/{}/commits?state=all&per_page=100&page={}&author={}&since={}".format(self.repo_owner, self.repo_name, index, author, sinceTime)
                     print(f'url : {url}')
                     response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False, timeout=10)
 
