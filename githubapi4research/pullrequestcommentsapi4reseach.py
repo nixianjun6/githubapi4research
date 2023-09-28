@@ -37,7 +37,7 @@ class PullRequestCommentsAPI4Research(GithubAPI4Research):
 
         while True:
             try:
-                url = "https://api.github.com/repos/{}/{}/pulls/comments?per_page=100&page={}&sort=created&direction=asc&since={}".format(self.repo_owner, self.repo_name, index, sinceTime)
+                url = "https://api.github.com/repos/{}/{}/pulls/comments?per_page=100&page={}&sort=created_at&direction=asc&since={}".format(self.repo_owner, self.repo_name, index, sinceTime)
                 print(url)
                 response = requests.get(url=url, headers={'Authorization': 'token {}'.format(self.api_token)}, verify=False)
 
