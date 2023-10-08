@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup (
     name="githubapi4research",
-    version='0.0.1',
+    version='0.0.2',
     author="nixianjun6",
     author_email="18373052@buaa.edu.cn",
     description="easier to use github api for research",
